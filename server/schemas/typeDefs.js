@@ -21,8 +21,17 @@ type User {
       title: String
       image: String
       link: String
+  }
 
+  type Query {
+      me: User
+  }
+
+  type Mutation {
+    addUser(username: String!, email: String!, password: String!): Auth
   }
 
 
 `
+
+module.exports = typeDefs;

@@ -15,6 +15,12 @@ const server = new ApolloServer({
   context: authMiddleware,
 });
 
+const startServer = async () => {
+  await server.start();
+}
+
+startServer();
+
 server.applyMiddleware({ app });
 
 app.use(express.urlencoded({ extended: true }));
@@ -24,19 +30,6 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
 }
 
-// set url to allow origin (client URL)
-if (process.env.NODE_ENV === 'production') {
-  var corsOptions = {
-    origin: 'https://typeplusplus.herokuapp.com/',
-  };
-} else {
-  var corsOptions = {
-    origin: 'http://localhost:3000',
-  };
-}
-app.use(cors(corsOptions));
-app.use(require('./controllers'));
-
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
@@ -45,7 +38,7 @@ db.once('open', () => {
   console.log(
     `GraphQL server ready at http://localhost:${PORT}${server.graphqlPath}`
   );
-  httpServer.listen(PORT, () =>
+  app.listen(PORT, () =>
     console.log(`Listening on localhost:${PORT}`)
   );
 });
