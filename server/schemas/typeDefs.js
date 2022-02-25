@@ -23,12 +23,20 @@ type User {
       link: String
   }
 
+  input Authors {
+      content: String
+      author: String
+  }
+
   type Query {
       me: User
   }
 
   type Mutation {
     addUser(username: String!, email: String!, password: String!): Auth
+    login(email: String!, password: String!): Auth
+    saveBook(input: Authors, description: String!, title: String!, bookId: ID!): User
+    removeBook(bookId: ID): User
   }
 
 
